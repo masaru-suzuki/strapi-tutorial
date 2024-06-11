@@ -1,5 +1,6 @@
+import { FeatureSection } from '@/components/custom/FeaturesSection';
 import { HeroSection } from '@/components/custom/HeroSection';
-import { flattenAttributes } from '@/lib/utils';
+import { flattenAttributes, getStrapiURL } from '@/lib/utils';
 import QueryString from 'qs';
 
 const homePageQuery = QueryString.stringify({
@@ -12,13 +13,16 @@ const homePageQuery = QueryString.stringify({
         link: {
           populate: true,
         },
+        feature: {
+          populate: true,
+        },
       },
     },
   },
 });
-
 async function getStrapiData(path: string) {
-  const baseUrl = 'http://localhost:1337';
+  const baseUrl = getStrapiURL();
+
   const url = new URL(path, baseUrl);
   url.search = homePageQuery;
 
@@ -26,6 +30,8 @@ async function getStrapiData(path: string) {
     const response = await fetch(url.href, { cache: 'no-store' });
     const data = await response.json();
     const flattenedData = flattenAttributes(data);
+    console.dir(flattenedData, { depth: null });
+
     return flattenedData;
   } catch (error) {
     console.error(error);
@@ -39,7 +45,7 @@ export default async function Home() {
   return (
     <main>
       <HeroSection data={blocks[0]} />
+      <FeatureSection data={blocks[1]} />
     </main>
   );
-  // return <></>;
 }
