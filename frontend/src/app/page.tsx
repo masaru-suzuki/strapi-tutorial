@@ -1,3 +1,4 @@
+import { flattenAttributes } from '@/lib/utils';
 import QueryString from 'qs';
 
 const homePageQuery = QueryString.stringify({
@@ -23,7 +24,10 @@ async function getStrapiData(path: string) {
   try {
     const response = await fetch(url.href);
     const data = await response.json();
-    return data;
+    const flattenedData = flattenAttributes(data);
+    console.dir(flattenedData, { depth: null });
+
+    return flattenedData;
   } catch (error) {
     console.error(error);
   }
@@ -31,7 +35,7 @@ async function getStrapiData(path: string) {
 
 export default async function Home() {
   const strapiData = await getStrapiData('/api/home-page');
-  const { title, description } = strapiData.data.attributes;
+  const { title, description } = strapiData;
 
   return (
     <main className="container mx-auto py-6">
