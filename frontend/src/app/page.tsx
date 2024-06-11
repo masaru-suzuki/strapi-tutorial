@@ -1,4 +1,19 @@
-import { Button } from '@/components/ui/button';
+import QueryString from 'qs';
+
+const homePageQuery = QueryString.stringify({
+  populate: {
+    blocks: {
+      populate: {
+        image: {
+          fields: ['url', 'alternativeText'],
+        },
+        link: {
+          populate: true,
+        },
+      },
+    },
+  },
+});
 
 async function getStrapiData(path: string) {
   const baseUrl = 'http://localhost:1337';
