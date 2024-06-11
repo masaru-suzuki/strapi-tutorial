@@ -54,5 +54,7 @@ export default async function Home() {
   const strapiData = await getStrapiData('/api/home-page');
   const { blocks } = strapiData;
 
+  if (!blocks) return <div>No Blocks Found</div>;
+
   return <main>{blocks.map((block: any) => blockRenderer(block))}</main>;
 }
