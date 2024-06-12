@@ -1,7 +1,8 @@
 'use server';
 
-export async function registerUserAction(formData: FormData) {
+export async function registerUserAction(prevState: any, formData: FormData) {
   console.log('Hello From Register User Action');
+  console.log({ prevState });
 
   const fields = {
     username: formData.get('username'),
@@ -11,4 +12,9 @@ export async function registerUserAction(formData: FormData) {
   console.log('---------------------');
   console.log(fields);
   console.log('---------------------');
+
+  return {
+    ...prevState,
+    data: fields,
+  };
 }
