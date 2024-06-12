@@ -54,10 +54,11 @@ export interface LayoutHeader extends Schema.Component {
   collectionName: 'components_layout_headers';
   info: {
     displayName: 'Header';
+    description: '';
   };
   attributes: {
     logoText: Attribute.Component<'components.link', true>;
-    ctaButton: Attribute.Component<'components.link', true>;
+    ctaButton: Attribute.Component<'components.link'>;
   };
 }
 

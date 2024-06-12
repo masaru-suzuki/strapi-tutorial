@@ -1,7 +1,8 @@
 {
   "collectionName": "components_layout_headers",
   "info": {
-    "displayName": "Header"
+    "displayName": "Header",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -12,7 +13,7 @@
     },
     "ctaButton": {
       "type": "component",
-      "repeatable": true,
+      "repeatable": false,
       "component": "components.link"
     }
   }
