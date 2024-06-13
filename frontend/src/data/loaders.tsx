@@ -80,3 +80,7 @@ export async function getSummaries() {
   const url = new URL('/api/summaries', baseUrl);
   return fetchData(url.href);
 }
+
+export async function getSummaryById(summaryId: string) {
+  return fetchData(`${baseUrl}/api/summaries/${summaryId}`);
+}
