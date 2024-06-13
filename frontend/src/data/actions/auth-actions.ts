@@ -1,12 +1,12 @@
 'use server';
 
 import { z } from 'zod';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import {
   loginUserService,
   registerUserService,
-} from '../servicies/auth-service';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+} from '../services/auth-service';
 
 const config = {
   maxAge: 60 * 60 * 24 * 7, // 1 week
