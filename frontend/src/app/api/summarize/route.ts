@@ -1,8 +1,31 @@
 import { NextRequest } from 'next/server';
 import { fetchTranscript } from '@/lib/youtube-transcript';
 
-function transformData(data: any[]) {
+import { getUserMeLoader } from '@/data/services/get-user-me-loader';
+import { getAuthToken } from '@/data/services/get-token';
+
+async function getTranscript(id: string) {
+  try {
+    return await fetchTranscript(id);
+  } catch (error) {
+    if (error instanceof Error)
+      return new Response(JSON.stringify({ error: error.message }));
+    return new Response(
+      JSON.stringify({ error: 'Failed to generate summary.' })
+    );
+  }
+}
+
+function transformData(data: any[] | Response) {
   let text = '';
+
+  if (data instanceof Response) {
+    // Handle the Response object
+    return {
+      data: null,
+      text: 'Failed to generate summary.',
+    };
+  }
 
   data.forEach((item) => {
     text += item.text + ' ';
@@ -15,18 +38,36 @@ function transformData(data: any[]) {
 }
 
 export async function POST(req: NextRequest) {
+  const user = await getUserMeLoader();
+  const token = await getAuthToken();
+
+  if (!user.ok || !token)
+    return new Response(
+      JSON.stringify({ data: null, error: 'Not authenticated' }),
+      { status: 401 }
+    );
+
+  if (user.data.credits < 1)
+    return new Response(
+      JSON.stringify({
+        data: null,
+        error: 'Insufficient credits',
+      }),
+      { status: 402 }
+    );
+
   console.log('FROM OUR ROUTE HANDLER:', req.body);
   const body = await req.json();
   const videoId = body.videoId;
 
-  let transcript: Awaited<ReturnType<typeof fetchTranscript>>;
+  let transcript: Awaited<ReturnType<typeof getTranscript>>;
 
   try {
-    transcript = await fetchTranscript(videoId);
+    transcript = await getTranscript(videoId);
   } catch (error) {
     console.error('Error processing request:', error);
     if (error instanceof Error)
-      return new Response(JSON.stringify({ error: error }));
+      return new Response(JSON.stringify({ error: error.message }));
     return new Response(JSON.stringify({ error: 'Unknown error' }));
   }
 
