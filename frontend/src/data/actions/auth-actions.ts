@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { registerUserService } from '../servicies/auth-service';
 
 const schemaRegister = z.object({
   username: z
@@ -25,9 +26,8 @@ const schemaRegister = z.object({
 });
 
 // MEMO: prevStateの定義が必要
+// ビジネスモデルによってはstrapiのEmailやユーザー名が重複している場合のエラー処理が必要
 export async function registerUserAction(prevState: any, formData: FormData) {
-  console.log({ prevState });
-
   const validatedFields = schemaRegister.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
@@ -35,15 +35,49 @@ export async function registerUserAction(prevState: any, formData: FormData) {
   });
 
   if (!validatedFields.success) {
+    console.log('###################################################');
+    console.log(
+      'Validation Error: ',
+      validatedFields.error.flatten().fieldErrors
+    );
+    console.log('###################################################');
+
     return {
       ...prevState,
       zodErrors: validatedFields.error.flatten().fieldErrors,
-      message: '入力内容に誤りがあります。登録に失敗しました。',
+      strapiErrors: null,
+      message: '入力エラーがあります。修正してください。',
     };
   }
 
-  return {
-    ...prevState,
-    data: 'ok',
-  };
+  const responseData = await registerUserService(validatedFields.data);
+
+  if (!responseData) {
+    console.log('###################################################');
+    console.log('Registration Service Error: レスポンスがありません。');
+    console.log('###################################################');
+
+    return {
+      ...prevState,
+      strapiErrors: null,
+      zodErrors: null,
+      message: 'レスポンスがありません。',
+    };
+  }
+
+  if (responseData.error) {
+    console.log('###################################################');
+    console.log('Strapiエラーが発生しました。', responseData.error);
+    console.log('###################################################');
+    return {
+      ...prevState,
+      strapiErrors: responseData.error,
+      zodErrors: null,
+      message: 'Strapiエラーが発生しました。',
+    };
+  }
+
+  console.log('#############');
+  console.log('User Registered Successfully', responseData.jwt);
+  console.log('#############');
 }
