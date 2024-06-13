@@ -1,3 +1,7 @@
+import { getSummaryById } from '@/data/loaders';
+import { SummaryCardForm } from '@/components/forms/SummaryCardForm';
+import { extractYouTubeID } from '@/lib/utils';
+
 interface ParamsProps {
   params: {
     videoId: string;
@@ -7,5 +11,7 @@ interface ParamsProps {
 export default async function SummaryCardRoute({
   params,
 }: Readonly<ParamsProps>) {
-  return <p>Summary card with go here: {params.videoId}</p>;
+  const data = await getSummaryById(params.videoId);
+  if (data?.error?.status === 404) return <p>No Items Found</p>;
+  const videoId = extractYouTubeID(data.videoId);
 }
