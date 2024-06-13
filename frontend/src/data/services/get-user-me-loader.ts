@@ -2,7 +2,8 @@ import { getStrapiURL } from '@/lib/utils';
 import qs from 'qs';
 import { getAuthToken } from './get-token';
 
-// 【質問】ProfileFormPropsの情報は取得しなくてもいいの？populateで指定せずにどうやって取得している？
+// 【疑問】ProfileFormPropsの情報は取得しなくてもいいの？populateで指定せずにどうやって取得している？
+// →ネストの深い情報を取得するためにpopulateを使用している。populateを使用しない場合は、そのまま取得できる。
 // interface ProfileFormProps {
 //   id: string;
 //   username: string;
