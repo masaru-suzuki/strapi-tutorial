@@ -1,11 +1,13 @@
 import qs from 'qs';
 import { flattenAttributes, getStrapiURL } from '@/lib/utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import { getAuthToken } from './services/get-token';
 
 const baseUrl = getStrapiURL();
 
 async function fetchData(url: string) {
-  const authToken = null; // これは後で実装します getAuthToken()
+  const authToken = await getAuthToken();
+
   const headers = {
     method: 'GET',
     headers: {
@@ -20,7 +22,7 @@ async function fetchData(url: string) {
     return flattenAttributes(data);
   } catch (error) {
     console.error('Error fetching data:', error);
-    throw error; // or return null;
+    throw error;
   }
 }
 
@@ -72,4 +74,9 @@ export async function getGlobalPageMetadata() {
   });
 
   return await fetchData(url.href);
+}
+
+export async function getSummaries() {
+  const url = new URL('/api/summaries', baseUrl);
+  return fetchData(url.href);
 }
