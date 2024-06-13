@@ -437,6 +437,7 @@ export interface ApiSummarySummary extends Schema.CollectionType {
     singularName: 'summary';
     pluralName: 'summaries';
     displayName: 'Summary';
+    description: '';
   };
   options: {
     draftAndPublish: true;

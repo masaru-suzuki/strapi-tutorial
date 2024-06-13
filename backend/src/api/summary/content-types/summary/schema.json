@@ -4,7 +4,8 @@
   "info": {
     "singularName": "summary",
     "pluralName": "summaries",
-    "displayName": "Summary"
+    "displayName": "Summary",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
