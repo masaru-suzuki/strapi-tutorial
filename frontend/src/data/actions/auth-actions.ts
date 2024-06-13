@@ -26,7 +26,6 @@ const schemaRegister = z.object({
 });
 
 // MEMO: prevStateの定義が必要
-// ビジネスモデルによってはstrapiのEmailやユーザー名が重複している場合のエラー処理が必要
 export async function registerUserAction(prevState: any, formData: FormData) {
   const validatedFields = schemaRegister.safeParse({
     username: formData.get('username'),
@@ -77,7 +76,7 @@ export async function registerUserAction(prevState: any, formData: FormData) {
     };
   }
 
-  console.log('#############');
+  console.log('###################################################');
   console.log('User Registered Successfully', responseData.jwt);
-  console.log('#############');
+  console.log('###################################################');
 }
