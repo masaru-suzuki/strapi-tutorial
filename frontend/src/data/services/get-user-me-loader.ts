@@ -2,6 +2,17 @@ import { getStrapiURL } from '@/lib/utils';
 import qs from 'qs';
 import { getAuthToken } from './get-token';
 
+// 【質問】ProfileFormPropsの情報は取得しなくてもいいの？populateで指定せずにどうやって取得している？
+// interface ProfileFormProps {
+//   id: string;
+//   username: string;
+//   email: string;
+//   firstName: string;
+//   lastName: string;
+//   bio: string;
+//   credits: number;
+// }
+
 const query = qs.stringify({
   populate: { image: { fields: ['url', 'alternativeText'] } },
 });
