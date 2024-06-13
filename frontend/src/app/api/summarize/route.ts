@@ -106,31 +106,29 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const videoId = body.videoId;
 
-  let transcript: Awaited<ReturnType<typeof getTranscript>>;
+  let transcript: Awaited<ReturnType<typeof fetchTranscript>>;
 
   try {
-    transcript = await getTranscript(videoId);
+    transcript = await fetchTranscript(videoId);
   } catch (error) {
     console.error('Error processing request:', error);
     if (error instanceof Error)
       return new Response(JSON.stringify({ error: error.message }));
-    return new Response(JSON.stringify({ error: 'Unknown error' }));
+    return new Response(JSON.stringify({ error: 'Error getting transcript.' }));
   }
 
   const transformedData = transformData(transcript);
-  console.log('Transcript:', transformedData);
+  console.log('Transformed Data', transformedData.text);
+
+  let summary: Awaited<ReturnType<typeof generateSummary>>;
 
   try {
-    return new Response(
-      JSON.stringify({ data: 'return from our handler', error: null }),
-      {
-        status: 200,
-      }
-    );
+    summary = await generateSummary(transformedData.text, TEMPLATE);
+    return new Response(JSON.stringify({ data: summary, error: null }));
   } catch (error) {
     console.error('Error processing request:', error);
     if (error instanceof Error)
-      return new Response(JSON.stringify({ error: error }));
-    return new Response(JSON.stringify({ error: 'Unknown error' }));
+      return new Response(JSON.stringify({ error: error.message }));
+    return new Response(JSON.stringify({ error: 'Error generating summary.' }));
   }
 }
