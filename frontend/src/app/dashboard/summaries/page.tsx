@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getSummaries } from '@/data/loaders';
+import { Search } from '@/components/custom/Search';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -28,11 +29,25 @@ function LinkCard({ id, title, summary }: Readonly<LinkCardProps>) {
   );
 }
 
-export default async function SummariesRoute() {
+interface SearchParamsProps {
+  searchParams?: {
+    query?: string;
+  };
+}
+
+export default async function SummariesRoute({
+  searchParams,
+}: Readonly<SearchParamsProps>) {
+  // this will gran our search params from the URL that we will pass to our getSummaries function
+  const query = searchParams?.query ?? '';
+
   const { data } = await getSummaries();
+
   if (!data) return null;
   return (
     <div className="grid grid-cols-1 gap-4 p-4">
+      <Search />
+      <span>Query: {query}</span>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {data.map((item: LinkCardProps) => (
           <LinkCard key={item.id} {...item} />
