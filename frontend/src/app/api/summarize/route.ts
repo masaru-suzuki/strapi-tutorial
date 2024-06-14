@@ -22,18 +22,18 @@ function transformData(data: any[]) {
 }
 
 const TEMPLATE = `
-INSTRUCTIONS:
-  For the this {text} complete the following steps.
-  Generate the title based on the content provided
-  Summarize the following content and include 5 key topics, writing in first person using normal tone of voice.
+指示:
+  この{text}に対して以下の手順を完了してください。
+  提供された内容に基づいてタイトルを生成します。
+  以下の内容を要約し、5つの重要なトピックを含め、通常の口調で一人称で書いてください。
 
-  Write a youtube video description
-    - Include heading and sections.
-    - Incorporate keywords and key takeaways
+  YouTube動画の説明を書いてください
+    - 見出しとセクションを含める。
+    - キーワードと重要なポイントを組み込む
 
-  Generate bulleted list of key points and benefits
+  重要なポイントと利益の箇条書きリストを生成する
 
-  Return possible and best recommended key words
+  可能性のあるおよび最も推奨されるキーワードを返す
 `;
 
 async function generateSummary(content: string, template: string) {
