@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import { cn, extractYouTubeID } from '@/lib/utils';
+
+import { generateSummaryService } from '@/data/services/summary-service';
+import { createSummaryAction } from '@/data/actions/summary-actions';
 
 import { Input } from '@/components/ui/input';
 import { SubmitButton } from '@/components/custom/SubmitButton';
-import { generateSummaryService } from '@/data/services/summary-service';
-import { extractYouTubeID } from '@/lib/utils';
-import { createSummaryAction } from '@/data/actions/summary-actions';
 
 interface StrapiErrorsProps {
   message: string | null;
@@ -28,7 +28,6 @@ export function SummaryForm() {
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
-    toast.success('Submitting Form');
 
     const formData = new FormData(event.currentTarget);
     const videoId = formData.get('videoId') as string;
@@ -47,10 +46,7 @@ export function SummaryForm() {
       return;
     }
 
-    toast.success('Generating Summary');
-
     const summaryResponseData = await generateSummaryService(videoId);
-    console.log(summaryResponseData, 'Response from route handler');
 
     if (summaryResponseData.error) {
       setValue('');
@@ -75,10 +71,10 @@ export function SummaryForm() {
     try {
       await createSummaryAction(payload);
     } catch (error) {
-      toast.error('Error Creating Summary');
+      toast.error('Failed to create summary');
       setError({
         ...INITIAL_STATE,
-        message: 'Error Creating Summary',
+        message: 'Failed to create summary',
         name: 'Summary Error',
       });
       setLoading(false);
