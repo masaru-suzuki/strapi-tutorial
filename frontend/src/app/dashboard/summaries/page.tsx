@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getSummaries } from '@/data/loaders';
 import { Search } from '@/components/custom/Search';
-
+import { PaginationComponent } from '@/components/custom/PaginationComponent';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface LinkCardProps {
@@ -53,6 +53,7 @@ export default async function SummariesRoute({
           <LinkCard key={item.id} {...item} />
         ))}
       </div>
+      <PaginationComponent pageCount={5} />
     </div>
   );
 }
