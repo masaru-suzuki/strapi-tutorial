@@ -76,7 +76,9 @@ export async function getGlobalPageMetadata() {
   return await fetchData(url.href);
 }
 
-export async function getSummaries(queryString: string) {
+export async function getSummaries(queryString: string, currentPage: number) {
+  const PAGE_SIZE = 1;
+
   const query = qs.stringify({
     sort: ['createdAt:desc'],
     filters: {
@@ -85,7 +87,12 @@ export async function getSummaries(queryString: string) {
         { summary: { $containsi: queryString } },
       ],
     },
+    pagination: {
+      pageSize: PAGE_SIZE,
+      page: currentPage,
+    },
   });
+
   const url = new URL('/api/summaries', baseUrl);
   url.search = query;
   return fetchData(url.href);
