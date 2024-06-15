@@ -41,7 +41,7 @@ export default async function SummariesRoute({
   // this will gran our search params from the URL that we will pass to our getSummaries function
   const query = searchParams?.query ?? '';
 
-  const { data } = await getSummaries();
+  const { data } = await getSummaries(query);
 
   if (!data) return null;
   return (
