@@ -12,6 +12,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'placehold.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'dependable-blessing-cf9a9b838d.media.strapiapp.com',
+      },
     ],
   },
 };
