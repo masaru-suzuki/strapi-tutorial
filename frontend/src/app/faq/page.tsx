@@ -1,17 +1,26 @@
 import { getFaqList } from '@/data/loaders';
 import { sortFAQsByCategory } from './util/sortFAQ';
 import { FAQ } from './components/Faq';
-import { Search } from '@/components/custom/Search';
+import { SearchFAQ } from '@/components/custom/SearchFAQ';
 
-export default async function Page() {
+interface SearchParamsProps {
+  searchParams?: {
+    query?: string;
+  };
+}
+export default async function Page({
+  searchParams,
+}: Readonly<SearchParamsProps>) {
+  const query = searchParams?.query ?? '';
   const { data } = await getFaqList();
+
   const sortDataByCategory = sortFAQsByCategory(data);
 
   return (
     <div className="max-w-screen-md mx-auto my-12">
       <h1 className="text-xl font-extrabold">faq page</h1>
       <div className="my-8">
-        <Search />
+        <SearchFAQ />
       </div>
       <div className="grid gap-8">
         {sortDataByCategory.map((category: any, i) => {
