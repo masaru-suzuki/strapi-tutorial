@@ -103,8 +103,22 @@ export async function getSummaryById(summaryId: string) {
   return fetchData(`${baseUrl}/api/summaries/${summaryId}`);
 }
 
-export async function getFaqList(queryString?: string) {
+export async function getFaqList(
+  queryString?: string,
+  isAuthenticated?: boolean
+) {
   const url = new URL('/api/faqs', baseUrl);
+
+  const filters: any = {
+    $or: [
+      { title: { $containsi: queryString } },
+      { body: { $containsi: queryString } },
+    ],
+  };
+
+  if (!isAuthenticated) {
+    filters.loginOnly = { $ne: true };
+  }
 
   url.search = qs.stringify({
     fields: ['id', 'title', 'loginOnly'],
@@ -113,12 +127,7 @@ export async function getFaqList(queryString?: string) {
         fields: ['label', 'url'],
       },
     },
-    filters: {
-      $or: [
-        { title: { $containsi: queryString } },
-        { body: { $containsi: queryString } },
-      ],
-    },
+    filters: filters,
     sort: ['createdAt:desc'],
   });
 

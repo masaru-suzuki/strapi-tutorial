@@ -8,11 +8,15 @@ interface SearchParamsProps {
     query?: string;
   };
 }
+
+const getUserAuth = (): boolean => true;
+
 export default async function Page({
   searchParams,
 }: Readonly<SearchParamsProps>) {
   const query = searchParams?.query ?? '';
-  const { data } = await getFaqList(query);
+  const isAuthenticated = getUserAuth();
+  const { data } = await getFaqList(query, isAuthenticated);
 
   const sortDataByCategory = sortFAQsByCategory(data);
 
@@ -22,7 +26,14 @@ export default async function Page({
       <div className="my-8">
         <SearchFAQ />
       </div>
+      <div className="my-8">
+        <p className={`text-${isAuthenticated ? 'green' : 'red'}-400`}>
+          {/* <p className={`text-green-400`}> */}
+          isAuthenticated: {isAuthenticated ? '認証済み' : '未認証'}
+        </p>
+      </div>
       <div className="grid gap-8">
+        {sortDataByCategory.length === 0 && <div>データがありません</div>}
         {sortDataByCategory.map((category: any, i) => {
           const { categoryLabel, categoryUrl, faqs } = category;
 
