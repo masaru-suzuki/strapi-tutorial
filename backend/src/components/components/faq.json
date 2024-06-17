@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_components_faqs",
+  "info": {
+    "displayName": "Faq",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "loginOnly": {
+      "type": "boolean",
+      "default": false
+    },
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "answer": {
+      "type": "blocks",
+      "required": true
+    }
+  }
+}

@@ -1,5 +1,18 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface ComponentsFaq extends Schema.Component {
+  collectionName: 'components_components_faqs';
+  info: {
+    displayName: 'Faq';
+    description: '';
+  };
+  attributes: {
+    loginOnly: Attribute.Boolean & Attribute.DefaultTo<false>;
+    question: Attribute.String & Attribute.Required;
+    answer: Attribute.Blocks & Attribute.Required;
+  };
+}
+
 export interface ComponentsFeature extends Schema.Component {
   collectionName: 'components_components_features';
   info: {
@@ -22,6 +35,17 @@ export interface ComponentsLink extends Schema.Component {
     url: Attribute.String;
     text: Attribute.String;
     isExternal: Attribute.Boolean & Attribute.DefaultTo<false>;
+  };
+}
+
+export interface LayoutFaqGroups extends Schema.Component {
+  collectionName: 'components_layout_faq_groups';
+  info: {
+    displayName: 'FAQ Groups';
+  };
+  attributes: {
+    faq: Attribute.Component<'components.faq', true>;
+    heading: Attribute.String;
   };
 }
 
@@ -79,8 +103,10 @@ export interface LayoutHeroSection extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'components.faq': ComponentsFaq;
       'components.feature': ComponentsFeature;
       'components.link': ComponentsLink;
+      'layout.faq-groups': LayoutFaqGroups;
       'layout.features-section': LayoutFeaturesSection;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;

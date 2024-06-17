@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_layout_faq_groups",
+  "info": {
+    "displayName": "FAQ Groups"
+  },
+  "options": {},
+  "attributes": {
+    "faq": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.faq"
+    },
+    "heading": {
+      "type": "string"
+    }
+  }
+}
