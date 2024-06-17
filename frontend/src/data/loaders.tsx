@@ -17,7 +17,8 @@ async function fetchData(url: string) {
   };
 
   try {
-    const response = await fetch(url, authToken ? headers : {});
+    // const response = await fetch(url, authToken ? headers : {});
+    const response = await fetch(url);
     const data = await response.json();
     return flattenAttributes(data);
   } catch (error) {
@@ -100,4 +101,37 @@ export async function getSummaries(queryString: string, currentPage: number) {
 
 export async function getSummaryById(summaryId: string) {
   return fetchData(`${baseUrl}/api/summaries/${summaryId}`);
+}
+
+export async function getFaqList() {
+  const url = new URL('/api/faqs', baseUrl);
+
+  url.search = qs.stringify({
+    fields: ['id', 'title', 'loginOnly'],
+    populate: {
+      faq_categories: {
+        fields: ['label', 'url'],
+      },
+    },
+  });
+
+  return await fetchData(url.href);
+}
+
+export async function getFaqById(id: string) {
+  console.log(`${baseUrl}/api/faqs/${id}`);
+
+  return fetchData(`${baseUrl}/api/faqs/${id}`);
+
+  // const url = new URL('/api/faqs', baseUrl);
+  // url.search = qs.stringify({
+  //   fields: ['id', 'title', 'loginOnly'],
+  //   populate: {
+  //     faq_categories: {
+  //       fields: ['label', 'url'],
+  //     },
+  //   },
+  // });
+
+  // return await fetchData(`${url.href}/${id}`);
 }
