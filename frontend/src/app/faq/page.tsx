@@ -12,7 +12,7 @@ export default async function Page({
   searchParams,
 }: Readonly<SearchParamsProps>) {
   const query = searchParams?.query ?? '';
-  const { data } = await getFaqList();
+  const { data } = await getFaqList(query);
 
   const sortDataByCategory = sortFAQsByCategory(data);
 

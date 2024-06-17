@@ -103,7 +103,7 @@ export async function getSummaryById(summaryId: string) {
   return fetchData(`${baseUrl}/api/summaries/${summaryId}`);
 }
 
-export async function getFaqList() {
+export async function getFaqList(queryString?: string) {
   const url = new URL('/api/faqs', baseUrl);
 
   url.search = qs.stringify({
@@ -113,25 +113,18 @@ export async function getFaqList() {
         fields: ['label', 'url'],
       },
     },
+    filters: {
+      $or: [
+        { title: { $containsi: queryString } },
+        { body: { $containsi: queryString } },
+      ],
+    },
+    sort: ['createdAt:desc'],
   });
 
   return await fetchData(url.href);
 }
 
 export async function getFaqById(id: string) {
-  console.log(`${baseUrl}/api/faqs/${id}`);
-
   return fetchData(`${baseUrl}/api/faqs/${id}`);
-
-  // const url = new URL('/api/faqs', baseUrl);
-  // url.search = qs.stringify({
-  //   fields: ['id', 'title', 'loginOnly'],
-  //   populate: {
-  //     faq_categories: {
-  //       fields: ['label', 'url'],
-  //     },
-  //   },
-  // });
-
-  // return await fetchData(`${url.href}/${id}`);
 }
