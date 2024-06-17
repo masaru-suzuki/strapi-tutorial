@@ -803,18 +803,63 @@ export interface ApiFaqFaq extends Schema.CollectionType {
     singularName: 'faq';
     pluralName: 'faqs';
     displayName: 'FAQ';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    faq: Attribute.Component<'layout.faq-groups', true>;
+    title: Attribute.String & Attribute.Required;
+    body: Attribute.Blocks & Attribute.Required;
+    loginOnly: Attribute.Boolean & Attribute.DefaultTo<false>;
+    faq_categories: Attribute.Relation<
+      'api::faq.faq',
+      'manyToMany',
+      'api::faq-category.faq-category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::faq.faq', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::faq.faq', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiFaqCategoryFaqCategory extends Schema.CollectionType {
+  collectionName: 'faq_categories';
+  info: {
+    singularName: 'faq-category';
+    pluralName: 'faq-categories';
+    displayName: 'FAQCategory';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    label: Attribute.String;
+    url: Attribute.String & Attribute.Required;
+    categories: Attribute.Relation<
+      'api::faq-category.faq-category',
+      'manyToMany',
+      'api::faq.faq'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::faq-category.faq-category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::faq-category.faq-category',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -945,6 +990,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::faq.faq': ApiFaqFaq;
+      'api::faq-category.faq-category': ApiFaqCategoryFaqCategory;
       'api::global.global': ApiGlobalGlobal;
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::summary.summary': ApiSummarySummary;

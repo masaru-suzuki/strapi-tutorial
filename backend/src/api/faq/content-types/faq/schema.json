@@ -4,17 +4,31 @@
   "info": {
     "singularName": "faq",
     "pluralName": "faqs",
-    "displayName": "FAQ"
+    "displayName": "FAQ",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "faq": {
-      "type": "component",
-      "repeatable": true,
-      "component": "layout.faq-groups"
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "blocks",
+      "required": true
+    },
+    "loginOnly": {
+      "type": "boolean",
+      "default": false
+    },
+    "faq_categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::faq-category.faq-category",
+      "mappedBy": "categories"
     }
   }
 }

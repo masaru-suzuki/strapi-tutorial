@@ -1,5 +1,19 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface ComponentsFaqCategory extends Schema.Component {
+  collectionName: 'components_components_faq_categories';
+  info: {
+    displayName: 'faqCategory';
+  };
+  attributes: {
+    faqs: Attribute.Relation<
+      'components.faq-category',
+      'oneToMany',
+      'api::faq.faq'
+    >;
+  };
+}
+
 export interface ComponentsFaq extends Schema.Component {
   collectionName: 'components_components_faqs';
   info: {
@@ -42,9 +56,10 @@ export interface LayoutFaqGroups extends Schema.Component {
   collectionName: 'components_layout_faq_groups';
   info: {
     displayName: 'FAQ Groups';
+    description: '';
   };
   attributes: {
-    faq: Attribute.Component<'components.faq', true>;
+    faqs: Attribute.Component<'components.faq', true>;
     heading: Attribute.String;
   };
 }
@@ -103,6 +118,7 @@ export interface LayoutHeroSection extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'components.faq-category': ComponentsFaqCategory;
       'components.faq': ComponentsFaq;
       'components.feature': ComponentsFeature;
       'components.link': ComponentsLink;

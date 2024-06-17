@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_components_faq_categories",
+  "info": {
+    "displayName": "faqCategory"
+  },
+  "options": {},
+  "attributes": {
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
+    }
+  }
+}
