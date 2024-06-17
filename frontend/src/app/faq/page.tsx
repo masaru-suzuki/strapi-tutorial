@@ -1,36 +1,40 @@
 import { getFaqList } from '@/data/loaders';
 import { sortFAQsByCategory } from './util/sortFAQ';
 import { FAQ } from './components/Faq';
+import { Search } from '@/components/custom/Search';
 
 export default async function Page() {
   const { data } = await getFaqList();
   const sortDataByCategory = sortFAQsByCategory(data);
 
   return (
-    <div className="">
+    <div className="max-w-screen-md mx-auto my-12">
       <h1 className="text-xl font-extrabold">faq page</h1>
+      <div className="my-8">
+        <Search />
+      </div>
+      <div className="grid gap-8">
+        {sortDataByCategory.map((category: any, i) => {
+          const { categoryLabel, categoryUrl, faqs } = category;
 
-      {sortDataByCategory.map((category: any, i) => {
-        const { categoryLabel, categoryUrl, faqs } = category;
+          return (
+            <section id={`${categoryUrl}-${i}`}>
+              <h2 className="text-lg font-bold">{categoryLabel}</h2>
+              <ul className="mt-4">
+                {faqs.map((faq: FAQ) => {
+                  const { id, title, loginOnly } = faq;
 
-        return (
-          <section id={`${categoryUrl}-${i}`}>
-            <h2 className="text-lg font-bold">{categoryLabel}</h2>
-            <ul>
-              {faqs.map((faq: FAQ) => {
-                console.log(faq);
-                const { id, title, loginOnly } = faq;
-
-                return (
-                  <li key={id}>
-                    <a href={`/faq/${id}`}>{title}</a>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        );
-      })}
+                  return (
+                    <li key={id} className="border-bottom border-b py-4">
+                      <a href={`/faq/${id}`}>{title}</a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
     </div>
   );
 }
